@@ -23,7 +23,30 @@ Motivation
 - example 
 
 History
-* 
+* Around for 40 or so years
+ - testing smallest 'unit'
+ - used w. mainframes, etc.  usually at the 'module' level
+* repurposed by Kent Beck, Erich Gamma about 14 yrs ago
+ - JUnit
+ - established xUnit style
+* Into behavior driven testing
+ - more readable
+ - more focused on use thru interface
+
+TDD
+* Test before code
+* Algorithm
+select a feature
+write some tests
+run tests (they should all fail)
+implement feature a bit a a time
+run tests until all pass
+repeat
+* Advantages
+ - better code
+ 
+BDD
+
 
 Approach
 * layers
@@ -31,9 +54,11 @@ Approach
 * stub, mock, fake objects, dependency injection
 * performance, integration, functional testing
 * pulling it together
+* automated tests
+* continuous integration
 
-TDD
-
-BDD
+* Fragile Tests
+* Additional time
+* Des
 
 How to apply to your project
