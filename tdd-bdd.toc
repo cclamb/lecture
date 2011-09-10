@@ -1,6 +1,0 @@
-\beamer@endinputifotherversion {3.07pt}
-\select@language {english}
-\beamer@sectionintoc {1}{UNM Informatics}{3}{0}{1}
-\beamer@sectionintoc {2}{Usage Management and Cloud Systems}{4}{0}{2}
-\beamer@sectionintoc {3}{Example Systems}{6}{0}{3}
-\beamer@sectionintoc {4}{Conclusions and Future Work}{14}{0}{4}
