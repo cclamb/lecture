@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.9.6)  10 SEP 2011 17:23
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.9.6)  10 SEP 2011 17:37
 entering extended mode
  %&-line parsing enabled.
 **tdd-bdd.tex
@@ -924,6 +924,28 @@ File: ./images/UNM.JPG Graphic file (type jpg)
  <use ./images/UNM.JPG> [23
 
 ]
+File: ./images/UNM.JPG Graphic file (type jpg)
+ <use ./images/UNM.JPG>
+[24
+
+]
+File: ./images/UNM.JPG Graphic file (type jpg)
+ <use ./images/UNM.JPG> [25
+
+]
+File: ./images/UNM.JPG Graphic file (type jpg)
+ <use ./images/UNM.JPG> [26
+
+]
+File: ./images/UNM.JPG Graphic file (type jpg)
+
+<use ./images/UNM.JPG> [27
+
+]
+File: ./images/UNM.JPG Graphic file (type jpg)
+ <use ./images/UNM.JPG> [28
+
+]
 \tf@nav=\write6
 \openout6 = `tdd-bdd.nav'.
 
@@ -943,23 +965,26 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 12982 strings out of 495061
- 226786 string characters out of 1182574
+ 12993 strings out of 495061
+ 226893 string characters out of 1182574
  311648 words of memory out of 3000000
  15743 multiletter control sequences out of 15000+50000
  8386 words of font info for 32 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  45i,14n,51p,475b,620s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-te
-xlive/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-texlive/fonts/
-type1/public/amsfonts/cm/cmss9.pfb></usr/share/texmf-texlive/fonts/type1/public
-/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
-/cm/cmssi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.
-pfb>
-Output written on tdd-bdd.pdf (23 pages, 231601 bytes).
+pdfTeX warning (dest): name{Navigation29} has been referenced but does not ex
+ist, replaced by a fixed one
+
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share
+/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-texl
+ive/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-texlive/fonts/ty
+pe1/public/amsfonts/cm/cmss9.pfb></usr/share/texmf-texlive/fonts/type1/public/a
+msfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/c
+m/cmssi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pf
+b>
+Output written on tdd-bdd.pdf (28 pages, 259920 bytes).
 PDF statistics:
- 649 PDF objects out of 1000 (max. 8388607)
- 50 named destinations out of 1000 (max. 500000)
+ 778 PDF objects out of 1000 (max. 8388607)
+ 61 named destinations out of 1000 (max. 500000)
  62 words of extra memory for PDF output out of 10000 (max. 10000000)
 
