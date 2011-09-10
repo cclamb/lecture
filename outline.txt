@@ -1,0 +1,39 @@
+Motivation
+* software is hard to do
+ - layers, trust
+* Testing usually done by testers thru UI
+ - tests only a small portion of cases and code
+ - how to test error conditions in your data layer?
+* Unit testing
+ - test individual units of functionality in your code (classes, methods, functions)
+  : usually use mock objects, runnable in any environment
+ - You can use unit testing frameworks for integration testing and functional testing too
+  : Functional testing - no mocks, tied to runtime environment
+  : Integration testing - testing more than one unit; e.g. multiple layers or components
+* Testing in isolation allows more complete testing, less complexity, better software
+ - documentation of programmatic use
+ - better design, forces use in more than one domain, design for test
+ - more agile, easier to change your software
+ - easier to integrate later
+* Metrics
+ - Test coverage
+  : misleading, you need to test some parts of code multiple times for different conditions
+  : Still good to measure, use a target coverage that makes sense for you
+  : More tests for complex code - even better, refactor into simpler code if possible
+- example 
+
+History
+* 
+
+Approach
+* layers
+* classes, methods, multiple tests
+* stub, mock, fake objects, dependency injection
+* performance, integration, functional testing
+* pulling it together
+
+TDD
+
+BDD
+
+How to apply to your project
