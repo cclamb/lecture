@@ -32,12 +32,12 @@
 
 %---------------------------Title frame definition------------------------------------- 
 
-\title{Managed Control of Composite Cloud Systems}
-\author [Chris]{Christopher C. Lamb, Pramod A. Jamkhedkar, Gregory L. Heileman, and Chaouki T. Abdallah}
+\title{Behavior Driven Development}
+\author [Chris]{Christopher C. Lamb}
 \institute[University of New Mexico]{
 \inst {}Department of Electrical and Computer Engineering\\
 University of New Mexico}
-\date{June 10, 2011}
+\date{June 13, 2011}
 \titlegraphic{
 \begin{figure} 
 \includegraphics[width = 7cm]{UNM}
@@ -67,227 +67,125 @@ University of New Mexico}
 \tableofcontents 
 \end{frame}
 
-\section{UNM Informatics}
+\section{What is Behavior Driven Development?}
+
 \begin{frame}
-\frametitle{Areas of Study}
-
-Our group:
-\begin{itemize}
-\item \textit{UNM Informatics} \\
- Information security, theory, and architectures; this work is specific to information architectures 
-\item \textit{Usage Management} \\
-Control of how an artifact is used, covering everything \textit{after} access as well as controlling access itself
-\end{itemize}
-%\pause
-
-\textit{Motivation} \\
-We believe people should have control over their own information.  Or past motivation for DRM work was to provide content control to content creators.  Doing so provides incentive for innovation, and improves quality of life for individuals and society as a whole over time.  We believe usage management provides the same benefits, and should be unobtrusive.
+\frametitle{What is Behavior Driven Development?}
+\textbf{Behavior Driven Development (BDD) is a second-generation, outside-in, pull-based, multiple-stakeholder, multiple-scale, high-automation, agile methodology. It describes a cycle of interactions with well-defined outputs, resulting in the delivery of working, tested software that matters.}
+\newline
+\textit{--- Dan North, London, 2009}
 \newline
 \newline
-%\pause
-This motivation holds in this domain as well.
+\newline
+\pause
+Basically, this means that it is driven by specific, quantifiable value associated by produced code.  The code is produced with an eye toward \textit{verifiable quality}, and as much of the quality strategy as possible is automated.  This implies that we have automated tests and automated builds.  BDD builds on \textit{Test Driven Development} (TDD), which in turn builds on disciplined unit testing.  We'll cover all of this today.
 \end{frame}
 
-\section{Usage Management and Cloud Systems}
-\begin{frame}
-\frametitle{Why is this important?}
-Utility computing will certainly be the most pervasive future computing model \\
-%\pause
-\begin{itemize}
-\item \textit{Mainframes won!}
-%\pause
-\begin{itemize}
-\item Well, end devices are powerful
-\item Cloud computing pervasive for \textit{convenience}, not \textit{technical necessity}
-\item \textit{Still resembles centralized models of the past}
-\end{itemize}
-%\pause
-\item \textit{People should control what they own}
-\begin{itemize}
-\item Access
-\item Retention
-\item Distribution
-\end{itemize}
-%\pause 
-\item \textit{Organizations should control what they pay for}
-\begin{itemize}
-\item Systems
-\item Data
-\item Records
-\end{itemize}
-\end{itemize}
-\end{frame}
+\section{Unit Testing}
 
 \begin{frame}
-\frametitle{Problems}
-So this is what we would like to see, but problems abound
-\begin{itemize}
-\item \textit{Scalability, performance, usability, infrastructural support...}
-\end{itemize}
-%\pause
-Started examining automation and ability to combine service level agreements (SLAs)
-\begin{itemize}
-\item \textit{Automation} \\
-How we can automate control and enforcement
-\item \textit{Combine} \\
-How we can combine multiple SLAs into single SLAs
-\end{itemize}
-%\pause
-
-Surprisingly difficult...
-\begin{itemize}
-\item \textit{NP-Complete} \\
-Simple generalized SLAs are equivalent to \textit{SAT}
-\item \textit{Multiple Providers} \\
-Difficult constant factors related to latency, etc.
-\end{itemize}
- 
-\end{frame}
-
-\section{Example Systems}
-\begin{frame}
-\frametitle{Single Provider, Feedback}
-
-\begin{figure}
-\includegraphics[width = 8cm]{Single-QoS}
-\end{figure}
-
-Things we care about: \\
-\begin{itemize}
-\item \textit{Performance, Accessibility, Controllability}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Single Provider, Feedback}
-
-\begin{itemize}
-\item \textit{Cloud Controller} Provides an initial interface to administrative users to control the cloud.
-\item \textit{Cluster Controller} Managed by the cloud controller, the cluster controller manages the resources of a single cluster.
-\item \textit{Storage Controller} Provides storage of system images and for other general storage needs.
-\item \textit{Node Controller} Responsible for allocating, delivering, and managing individual compute nodes upon which client software runs.
-\item \textit{Node} The compute node delivering services to end users and managed by the cluster's control infrastructure.
-\item \textit{Policy} Quality of service terms the cloud provider has agreed to honor for the cloud customer.
-\item \textit{Resource Allocator} The component responsible for real-time tuning of the cloud system to maintain defined quality of service.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Single Provider, Feedback}
-The \textit{resource controller} tunes the \textit{cluster} based on obligations defined within the \textit{policy}. \\
-
-\begin{figure}
-\includegraphics[width = 5cm]{feedback}
-\end{figure}
-
-Multiple possible control loops:
-\begin{itemize}
-\item \textit{Physical Loop} \\
-Controls lower level server or rack specific attributes like cooling or power consumption
-\item \textit{Service Loop} \\
-Controls responses for the provider as a whole according to contractual obligations
-\end{itemize}
-
-Watch out for timing problems, inflexibility, intractable traceability
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Single Provider, Feedback with UM}
-
-\begin{figure}
-\includegraphics[width = 8cm]{Single-UM}
-\end{figure}
-
-New things we care about: \\
-\begin{itemize}
-\item \textit{Accessibility}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Single Provider, Feedback with UM}
-
-\begin{itemize}
-\item \textit{Cache Controllers} Streaming network data, specifically media-centric streams, can and are cached by strategically located cache systems.  In order to control the read access of network data, we must be able to exercise explicit control over any caching systems in our infrastructure.
-\item \textit{Switch} Really any kind of hardware that controls the delivery of network data.  This component includes switches and routers primarily.  In order to control how data is accessed we must be able to control the locations to which it is delivered.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Single Provider, Feedback with UM}
-We have also added a new relationship to enable control over the \textit{Cloud Controller}.  To ensure that we can control where data is at any given time, we must also be able to control the geographic areas from which data is generated, especially if the virtual compute cloud spans national boundaries.
+\frametitle{So what is this testing of units?}
+Unit testing has been around for 40 years or so.  Basically, you test the smallest units of code that are assembled into your system.  People used to do it with mainframes.  Automated testing's been around that long too, but people used to write their own test frameworks for this kind of thing.  About 15 years ago, Things changed.
+\pause
 \newline
 \newline
-We also must be able to control where specifically the data resides; ergo we must have control over caches and switches
+Kent Beck and Erich Gamma created JUnit, a unit testing framework to support the development methodology they were evangelizing (e.g. eXtreme Programming).  Both of them are still around, and both were and are very influential.  Now we test classes and methods.
 \newline
 \newline
-As the system is growing, we have:
+This established a de-facto standard for unit test frameworks now referred to as \textit{xUnit}.
+\end{frame}
+
+\begin{frame}
+\frametitle{Why do we do it?}
+Developing software is hard.  It's getting harder and harder as time goes by.  Software systems are becoming:
 \begin{itemize}
-\item \textit{More Complexity} \\
-New relationships and elements
-\item \textit{Growth is Linear} \\
-We do control new items, but growth is not geometric
+\item \textit{More Complex} \\
+Ten years ago distributed systems were hard.  Mobile computing was just starting.  Now everything's distributed, cloud computing is widely used by developers, mobile computing ubiquitous.  This all depends on layers upon layers of usually third-party libraries.
+\pause
+\item \textit{Less Trustworthy} \\
+So we use all these new libraries to create software, how do we know that it's trustworthy? that we're using it correctly? When we need to change our code base, do we know we can do it without causing other problems?
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Multiple Providers}
-
-\begin{figure}
-\includegraphics[width = 8cm]{Multiple}
-\end{figure}
-
-New Concepts:
-\begin{itemize}
-\item \textit{Provider Service Differentiation} \\
-Multiple providers involved offering different services
-\item \textit{Control Perspectives} \\
-We now include a client-centric perspective
-\end{itemize}
-
+\frametitle{Why do we do it?}
+This is much better than the way we used to develop and test software.
+\newline
+\newline
+\newline
+\pause
+Back in the old days, most projects had dedicated testing teams, with legions of testers.  These testers would test the system through some kind of user interface, something they built or one of the developers built, and then they would test the system according to some huge test plan that outlined thousands of steps they needed to go through to test the software.
+\newline
+\newline
+\newline
+\pause
+\textbf{This cost a fortune, and didn't work.}
 \end{frame}
 
 \begin{frame}
-\frametitle{Multiple Providers}
-We now have three different cloud providers
-\begin{itemize}
-\item $ cp $ \\
-...provides hosting for the \textit{User Interface} and \textit{Domain} layers 
-\item $ cp' $ \\
-...provides queuing services to the application
-\item $ cp'' $ \\
-...provides data storage
- \end{itemize}
- 
-Each cloud provider contains the same elements contained by the providers in the previous sections, including a \textit{Resource Allocator} specific to that cloud provider
+\frametitle{Why do we do it?}
+Just writing the test plan was a horrible, expensive experience.  These things were huge, and took lots of thought and time.  Then you needed an army to execute it, and it took forever, all of which cost \$\$\$.  And how can you test error conditions in your communication layer when it is two libraries removed from the user interface?
 \newline
 \newline
-Application control problematic...\\\
-...cloud control complexity is linear, \textit{Application} control is exponential in number of involved systems
- 
+\newline
+\pause
+Answer: you can't, not through the UI.
+\newline
+\newline
+\newline
+\textbf{Enter unit tests.}
 \end{frame}
 
-\section{Conclusions and Future Work}
 \begin{frame}
-\frametitle{Conclusions and Future Work}
-Conclusions include...
+\frametitle{Why do we do it?}
+Unit testing solves many of these problems.  Unit tests are:
 \begin{itemize}
-\item Difficult restrictions on control
-\item Possibly brittle
-\item Difficult to predict and time sensitive
-\item Becomes very complex from cloud client perspective
+\item \textit{Automated} --- Huge test suites run in seconds, and they can be automated to run whenever you want them to.  They can be configured to run whenever a developer checks \textit{any changes whatsoever} into a code base.
+\item \textit{Functional} --- The tests not only test the code, they serve as examples of how the code is to be used.
+\item \textit{Flexible} --- You can now test that hard-to-reach communication layer by building unit tests right into that code.
+\item \textit{Aggregateable} --- You can pull together unit tests for all of your code into \textit{test suites}.
 \end{itemize}
-Future work involves more rigorous analysis of multiple provider complexity and implementation and validation of initial control models
 \end{frame}
 
-%\bibliographystyle{plain}
-%\bibliography{drm}
+\begin{frame}
+\frametitle{How do we do it?}
+Generally, you will test individual units of functionality in your code.  Thing classes, methods, functions.  Unit tests are self contained, and not dependent on any single runtime environment.  To do this you usually use mocks or stubs, which \textit{emulate} dependencies.  To do this, you need to design your code to be testable, usually using a pattern called \textit{Dependency Injection}.
+\newline
+\newline
+\pause
+We can use unit testing frameworks to support a variety of other testing methods as well.  You can use them for:
+\begin{itemize}
+\item \textit{Functional testing} --- no mocks, tied to runtime environment
+\item \textit{Integration testing} --- testing more than one unit; e.g. multiple layers or components
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Unit testing allows more complete testing, less complexity, and better software through:
+\begin{itemize}
+\item documentation of programmatic use
+\item better design, forces use in more than one domain, design for test
+\item more agility, easier to change your software
+\item ease of later integration
+\end{itemize}
+Now keep in mind, unit tests aren't free.
+\newline
+\newline
+\pause
+They take time to write, and if you're not careful you can create \textit{fragile tests}, which break easily when the code is changed, leading you to spend an inordinate amount of time altering your test suite.  These are the two most sensible arguments people use against unit testing.  Less sensible arguments include the \textbf{my code doesn't need them} or the \textbf{I already know how to do my job} arguments.
+\end{frame}
+
+\section{Test Driven Development}
+
+\begin{frame}
+\frametitle{}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{}
+\end{frame}
 
 \end{document}
 
