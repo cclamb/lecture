@@ -44,8 +44,13 @@ run tests until all pass
 repeat
 * Advantages
  - better code
+* Why don't people do this more?
+ - hard, disciplined
+ - time
+ - quality unimportant
  
 BDD
+* Refinement of TDD
 
 
 Approach
