@@ -197,30 +197,47 @@ Ergo, \textbf{Test Driven Development} was born.
 \begin{frame}
 \frametitle{How does it work?}
 You use a simple algorithm:
-\newline
-\newline
-\textit{select a feature}
-\newline
+\begin{enumerate}
+\item \textit{select a feature}
 \newline
 \pause
-\textit{write some tests}
-\newline
-\newline
-\pause
-\textit{run tests (they should all fail)}
-\newline
+\item \textit{write some tests}
 \newline
 \pause
-\textit{implement feature a bit a a time, running tests after each bit of work until all tests pass}
-\newline
+\item \textit{run tests (they should all fail)}
 \newline
 \pause
-\textit{repeat}
+\item \textit{implement feature a bit a a time, running tests after each bit of work until all tests pass}
 \newline
-\newline
+\pause
+\item \textit{repeat}
+\end{enumerate}
 \pause
 That's it!
 \end{frame}
+
+\begin{frame}
+\frametitle{Metrics for tests?}
+Okay, so now, if we're doing TDD, we're writing tests before we're writing code.  How can we tell we're writing good tests?
+\newline
+\newline
+\pause
+Writing software is \textit{hard}, remember? It's challenging to write good tests that don't need to be reworked again and again.  Some rules of thumb:
+\begin{itemize}
+\item \textit{Think about design} --- Most agile developers think that agile means you don't do design or architecture.  This isn't true --- rather, you do as \textit{little} design and architecture as possible to build a quality product that meets needs (you write as little code as possible too).  With TDD you can divide the task into smaller and smaller units to test (down to the method level) which makes it easier to think about issues like error handling and argument checking.  Your tests should reflect this.
+\item \textit{Black/white/grey box testing} --- Try to stay away from examining class internals.  They tend to change more than interfaces after the interfaces are established.  Be wary of using white or grey box testing and avoid it if you can.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Metrics for tests?}
+\begin{itemize}
+\item \textit{Refactor} --- One of the keys to using agile methods to develop good software is refactoring.  Just like you refactor your code when you find it needs it, you need to aggressively to this with your tests as well.
+\item \textit{Metrics} --- Test coverage is a worthwhile metric, and there's plenty of tools that can generate that for you.  Don't get lulled into a false sense of security though --- if your tests are poor, or you're not testing the right things, this will be misleading.  You'll also find that some areas need multiple tests under multiple different conditions (e.g. boundary conditions, error conditions, etc.)
+\end{itemize}
+\end{frame}
+
+\section{Behavior Driven Development}
 
 \begin{frame}
 \frametitle{}
