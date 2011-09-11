@@ -77,7 +77,7 @@ University of New Mexico}
 \newline
 \newline
 \newline
-\pause
+%\pause
 Basically, this means that it is driven by specific, quantifiable value associated by produced code.  The code is produced with an eye toward \textit{verifiable quality}, and as much of the quality strategy as possible is automated.  This implies that we have automated tests and automated builds.  BDD builds on \textit{Test Driven Development} (TDD), which in turn builds on disciplined unit testing.  We'll cover all of this today.
 \end{frame}
 
@@ -86,7 +86,7 @@ Basically, this means that it is driven by specific, quantifiable value associat
 \begin{frame}
 \frametitle{So what is this testing of units?}
 Unit testing has been around for 40 years or so.  Basically, you test the smallest units of code that are assembled into your system.  People used to do it with mainframes.  Automated testing's been around that long too, but people used to write their own test frameworks for this kind of thing.  About 15 years ago, Things changed.
-\pause
+%\pause
 \newline
 \newline
 Kent Beck and Erich Gamma created JUnit, a unit testing framework to support the development methodology they were evangelizing (e.g. eXtreme Programming).  Both of them are still around, and both were and are very influential.  Now we test classes and methods.
@@ -101,7 +101,7 @@ Developing software is hard.  It's getting harder and harder as time goes by.  S
 \begin{itemize}
 \item \textit{More Complex} \\
 Ten years ago distributed systems were hard.  Mobile computing was just starting.  Now everything's distributed, cloud computing is widely used by developers, mobile computing ubiquitous.  This all depends on layers upon layers of usually third-party libraries.
-\pause
+%\pause
 \item \textit{Less Trustworthy} \\
 So we use all these new libraries to create software, how do we know that it's trustworthy? that we're using it correctly? When we need to change our code base, do we know we can do it without causing other problems?
 \end{itemize}
@@ -114,12 +114,12 @@ This is much better than the way we used to develop and test software.
 \newline
 \newline
 \newline
-\pause
+%\pause
 Back in the old days, most projects had dedicated testing teams, with legions of testers.  These testers would test the system through some kind of user interface, something they built or one of the developers built, and then they would test the system according to some huge test plan that outlined thousands of steps they needed to go through to test the software.
 \newline
 \newline
 \newline
-\pause
+%\pause
 \textbf{This cost a fortune, and didn't work.}
 \end{frame}
 
@@ -129,7 +129,7 @@ Just writing the test plan was a horrible, expensive experience.  These things w
 \newline
 \newline
 \newline
-\pause
+%\pause
 Answer: you can't, not through the UI.
 \newline
 \newline
@@ -153,7 +153,7 @@ Unit testing solves many of these problems.  Unit tests are:
 Generally, you will test individual units of functionality in your code.  Thing classes, methods, functions.  Unit tests are self contained, and not dependent on any single runtime environment.  To do this you usually use mocks or stubs, which \textit{emulate} dependencies.  To do this, you need to design your code to be testable, usually using a pattern called \textit{Dependency Injection}.
 \newline
 \newline
-\pause
+%\pause
 We can use unit testing frameworks to support a variety of other testing methods as well.  You can use them for:
 \begin{itemize}
 \item \textit{Functional testing} --- no mocks, tied to runtime environment
@@ -172,7 +172,7 @@ Unit testing allows more complete testing, less complexity, and better software 
 Now keep in mind, unit tests aren't free.
 \newline
 \newline
-\pause
+%\pause
 They take time to write, and if you're not careful you can create \textit{fragile tests}, which break easily when the code is changed, leading you to spend an inordinate amount of time altering your test suite.  These are the two most sensible arguments people use against unit testing.  Less sensible arguments include the \textbf{my code doesn't need them} or the \textbf{I already know how to do my job} arguments.
 \end{frame}
 
@@ -183,11 +183,11 @@ They take time to write, and if you're not careful you can create \textit{fragil
 Well, it's another way to build software.
 \newline
 \newline
-\pause
+%\pause
 Remember, even if unit testing has been around for a while, it was primarily a niche practice.  For the most part, industry was using large test teams, understood that they didn't work well, but they knew how to do it.  So that's what people did.  When unit testing started to gain more mainstream acceptance, the flexibility of the practice (and the xUnit frameworks) allowed developers to change how they did their jobs, to enable them to produce better code.
 \newline
 \newline
-\pause
+%\pause
 Some renegade developers started \textit{writing tests for code that didn't exist}, and then they would create code so the tests would pass.
 \newline
 \newline
@@ -200,19 +200,19 @@ You use a simple algorithm:
 \begin{enumerate}
 \item \textit{select a feature}
 \newline
-\pause
+%\pause
 \item \textit{write some tests}
 \newline
-\pause
+%\pause
 \item \textit{run tests (they should all fail)}
 \newline
-\pause
+%\pause
 \item \textit{implement feature a bit a a time, running tests after each bit of work until all tests pass}
 \newline
-\pause
+%\pause
 \item \textit{repeat}
 \end{enumerate}
-\pause
+%\pause
 That's it!
 \end{frame}
 
@@ -221,7 +221,7 @@ That's it!
 Okay, so now, if we're doing TDD, we're writing tests before we're writing code.  How can we tell we're writing good tests?
 \newline
 \newline
-\pause
+%\pause
 Writing software is \textit{hard}, remember? It's challenging to write good tests that don't need to be reworked again and again.  Some rules of thumb:
 \begin{itemize}
 \item \textit{Think about design} --- Most agile developers think that agile means you don't do design or architecture.  This isn't true --- rather, you do as \textit{little} design and architecture as possible to build a quality product that meets needs (you write as little code as possible too).  With TDD you can divide the task into smaller and smaller units to test (down to the method level) which makes it easier to think about issues like error handling and argument checking.  Your tests should reflect this.
@@ -238,6 +238,36 @@ Writing software is \textit{hard}, remember? It's challenging to write good test
 \end{frame}
 
 \section{Behavior Driven Development}
+
+\begin{frame}
+\frametitle{What is Behavior Driven Development Then?}
+So, remember the definition from the first slide:
+\textbf{Behavior Driven Development (BDD) is a second-generation, outside-in, pull-based, multiple-stakeholder, multiple-scale, high-automation, agile methodology. It describes a cycle of interactions with well-defined outputs, resulting in the delivery of working, tested software that matters.}
+\newline
+\textit{--- Dan North, London, 2009}
+\newline
+\newline
+This sure sounds nifty.  But what does it really mean, and what kind of things do you use to do it?
+%\pause
+\begin{itemize}
+\item \textit{Test Driven Development} --- We've covered this.
+\item \textit{Domain Driven Design} --- A software design approach.
+\item \textit{Scrum (or similar)} --- An iterative software development methodology based on short cycles focused on clear user stories.
+\end{itemize}
+%\pause
+We'll touch on the last two now.
+\end{frame}
+
+\begin{frame}
+\frametitle{Domain Driven Design}
+Essentially, Domain Driven Design is a method of building software that separates system functions from domain functions, leading to cleaner, easier to understand code.  It does this by:
+\begin{itemize}
+\item \textit{•}
+\item \textit{•}
+\end{itemize}
+
+For more info: http://www.infoq.com/minibooks/domain-driven-design-quickly
+\end{frame}
 
 \begin{frame}
 \frametitle{}
