@@ -250,7 +250,7 @@ So, remember the definition from the first slide:
 This sure sounds nifty.  But what does it really mean, and what kind of things do you use to do it?
 %\pause
 \begin{itemize}
-\item \textit{Test Driven Development} --- We've covered this.
+\item \textit{Test Driven Development} --- We've covered this; though BDD testing is slightly different.
 \item \textit{Domain Driven Design} --- A software design approach.
 \item \textit{Scrum (or similar)} --- An iterative software development methodology based on short cycles focused on clear user stories.
 \end{itemize}
@@ -283,7 +283,65 @@ They all have tweaks beyond this, but this is really the core of most agile meth
 \end{frame}
 
 \begin{frame}
-\frametitle{}
+\frametitle{How BDD Testing differs}
+In the past, in Ruby, we'd use something like Test::Unit, an xUnit compatible unit testing suite delivered with Ruby installations.  Your tests would look something like this:
+\newline
+\newline
+class MyTests
+\newline
+\newline
+def test\_this \\
+    \# Test something... \\
+end
+\newline
+\newline
+end
+\newline
+\newline
+Pretty straightfoward.  You can see what the tests are, code 'em up, run 'em, all that good stuff.
+\end{frame}
+
+\begin{frame}
+\frametitle{BDD Tests are Different!}
+BDD test differ, and that's show in the syntax you use.  Generally, they're supposed to be clearly understandable and written in near english.  You \textit{describe} activities by illustrating what \textit{it should} do under certain conditions.
+\newline
+\newline
+%\pause
+In Ruby, we use RSpec to run these, and rspec tests look like this:
+\newline
+\newline
+describe 'create activity' do
+\newline
+\newline
+  it 'should be creatable with a block' do \\
+    \# test creating with a block \\
+  end
+\newline
+\newline
+  it 'should be creatable without a block' do \\
+    \# test creating without a block \\
+  end
+\newline
+\newline
+end
+\end{frame}
+
+\begin{frame}
+\frametitle{So what?}
+The nice thing about RSPec tests is that they are:
+\begin{itemize}
+\item \textit{Clear} --- The whole \textit{describe it should...} makes the \textit{intent} of the tests very clear, even to the author.
+\item \textit{Limited} --- The syntax also tends to enforce a more black-box testing style.  Here, we're constantly reminded that we're testing what a component \textit{should} do under specific condition, and that helps us from getting ourselves in trouble by testing things that perhaps we shouldn't.
+\end{itemize}
+%\pause
+The end result? \textbf{better tests}.
+\end{frame}
+
+\begin{frame}
+\frametitle{Questions?}
+\begin{center}
+Questions?
+\end{center}
 \end{frame}
 
 \end{document}
