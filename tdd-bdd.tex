@@ -78,7 +78,7 @@ University of New Mexico}
 \newline
 \newline
 %\pause
-Basically, this means that it is driven by specific, quantifiable value associated by produced code.  The code is produced with an eye toward \textit{verifiable quality}, and as much of the quality strategy as possible is automated.  This implies that we have automated tests and automated builds.  BDD builds on \textit{Test Driven Development} (TDD), which in turn builds on disciplined unit testing.  We'll cover all of this today.
+Basically, this means that it is driven by specific, quantifiable value associated with produced code.  The code is produced with an eye toward \textit{verifiable quality}, and as much of the quality strategy as possible is automated.  This implies that we have automated tests and automated builds.  BDD builds on \textit{Test Driven Development} (TDD), which in turn builds on disciplined unit testing.  We'll cover all of this today.
 \end{frame}
 
 \section{Unit Testing}
@@ -89,7 +89,7 @@ Unit testing has been around for 40 years or so.  Basically, you test the smalle
 %\pause
 \newline
 \newline
-Kent Beck and Erich Gamma created JUnit, a unit testing framework to support the development methodology they were evangelizing (e.g. eXtreme Programming).  Both of them are still around, and both were and are very influential.  Now we test classes and methods.
+Kent Beck and Erich Gamma created JUnit, a unit testing framework to support the development methodology they were evangelizing (e.g. eXtreme Programming).  Both of them are still around, and both were and are very influential.  We used to test modules and functions --- now we test classes and methods.
 \newline
 \newline
 This established a de-facto standard for unit test frameworks now referred to as \textit{xUnit}.
@@ -100,7 +100,7 @@ This established a de-facto standard for unit test frameworks now referred to as
 Developing software is hard.  It's getting harder and harder as time goes by.  Software systems are becoming:
 \begin{itemize}
 \item \textit{More Complex} \\
-Ten years ago distributed systems were hard.  Mobile computing was just starting.  Now everything's distributed, cloud computing is widely used by developers, mobile computing ubiquitous.  This all depends on layers upon layers of usually third-party libraries.
+Ten years ago distributed systems were cutting edge.  Mobile computing was just starting.  Now everything's distributed, cloud computing is widely used by developers, mobile computing ubiquitous.  This all depends on layers upon layers of usually third-party libraries.
 %\pause
 \item \textit{Less Trustworthy} \\
 So we use all these new libraries to create software, how do we know that it's trustworthy? that we're using it correctly? When we need to change our code base, do we know we can do it without causing other problems?
@@ -150,7 +150,7 @@ Unit testing solves many of these problems.  Unit tests are:
 
 \begin{frame}
 \frametitle{How do we do it?}
-Generally, you will test individual units of functionality in your code.  Thing classes, methods, functions.  Unit tests are self contained, and not dependent on any single runtime environment.  To do this you usually use mocks or stubs, which \textit{emulate} dependencies.  To do this, you need to design your code to be testable, usually using a pattern called \textit{Dependency Injection}.
+Generally, you will test individual units of functionality in your code.  Think classes, methods, functions.  Unit tests are self contained, and not dependent on any single runtime environment.  To do this you usually use \textit{mocks} or \textit{stubs}, which \textit{emulate} dependencies.  To do this, you need to design your code to be testable, usually using a pattern called \textit{Dependency Injection}.
 \newline
 \newline
 %\pause
@@ -185,7 +185,7 @@ Well, it's another way to build software.
 \newline
 \newline
 %\pause
-Remember, even if unit testing has been around for a while, it was primarily a niche practice.  For the most part, industry was using large test teams, understood that they didn't work well, but they knew how to do it.  So that's what people did.  When unit testing started to gain more mainstream acceptance, the flexibility of the practice (and the xUnit frameworks) allowed developers to change how they did their jobs, to enable them to produce better code.
+Remember, even if unit testing has been around for a while, it was primarily a niche practice.  For the most part, industry was using large test teams, understood that they didn't work well, but that was really the only game in town.  So that's what people did.  When unit testing started to gain more mainstream acceptance, the flexibility of the practice (and the xUnit frameworks) allowed developers to change how they did their jobs, to enable them to produce better code.
 \newline
 \newline
 %\pause
@@ -225,8 +225,8 @@ Okay, so now, if we're doing TDD, we're writing tests before we're writing code.
 %\pause
 Writing software is \textit{hard}, remember? It's challenging to write good tests that don't need to be reworked again and again.  Some rules of thumb:
 \begin{itemize}
-\item \textit{Think about design} --- Most agile developers think that agile means you don't do design or architecture.  This isn't true --- rather, you do as \textit{little} design and architecture as possible to build a quality product that meets needs (you write as little code as possible too).  With TDD you can divide the task into smaller and smaller units to test (down to the method level) which makes it easier to think about issues like error handling and argument checking.  Your tests should reflect this.
-\item \textit{Black/white/grey box testing} --- Try to stay away from examining class internals.  They tend to change more than interfaces after the interfaces are established.  Be wary of using white or grey box testing and avoid it if you can.
+\item \textit{Think about design} --- Most agile developers think that agile means you don't do design or architecture.  This isn't true --- rather, you do as \textit{little} design and architecture as possible to build a quality product that meets needs.  With TDD you can divide the task into smaller and smaller units to test which makes it easier to think about issues like error handling and argument checking.  Your tests should reflect this.
+\item \textit{Black/white/grey box testing} --- Try to stay away from examining object internals.  They tend to change more than interfaces after the interfaces are established.  Design tests with knowledge of implementation, but not dependency on it; this is \textit{grey box} testing.
 \end{itemize}
 \end{frame}
 
@@ -243,9 +243,9 @@ Writing software is \textit{hard}, remember? It's challenging to write good test
 \begin{frame}
 \frametitle{What is Behavior Driven Development?}
 So, remember the definition from the first slide:
-\textbf{Behavior Driven Development (BDD) is a second-generation, outside-in, pull-based, multiple-stakeholder, multiple-scale, high-automation, agile methodology. It describes a cycle of interactions with well-defined outputs, resulting in the delivery of working, tested software that matters.}
 \newline
-\textit{--- Dan North, London, 2009}
+\newline
+\textbf{Behavior Driven Development (BDD) is a second-generation, outside-in, pull-based, multiple-stakeholder, multiple-scale, high-automation, agile methodology. It describes a cycle of interactions with well-defined outputs, resulting in the delivery of working, tested software that matters.}
 \newline
 \newline
 This sure sounds nifty.  But what does it really mean, and what kind of things do you use to do it?
@@ -304,7 +304,7 @@ Pretty straightfoward.  You can see what the tests are, code 'em up, run 'em, al
 
 \begin{frame}
 \frametitle{BDD Tests are Different!}
-BDD test differ, and that's show in the syntax you use.  Generally, they're supposed to be clearly understandable and written in near english.  You \textit{describe} activities by illustrating what \textit{it should} do under certain conditions.
+BDD test differ, and that's shown in the syntax you use.  Generally, they're supposed to be clearly understandable and written in near english.  You \textit{describe} activities by illustrating what \textit{it should} do under certain conditions.
 \newline
 \newline
 %\pause
@@ -329,10 +329,10 @@ end
 
 \begin{frame}
 \frametitle{So what?}
-The nice thing about RSPec tests is that they are:
+The nice thing about RSpec tests is that they are:
 \begin{itemize}
 \item \textit{Clear} --- The whole \textit{describe it should...} makes the \textit{intent} of the tests very clear, even to the author.
-\item \textit{Limited} --- The syntax also tends to enforce a more black-box testing style.  Here, we're constantly reminded that we're testing what a component \textit{should} do under specific condition, and that helps us from getting ourselves in trouble by testing things that perhaps we shouldn't.
+\item \textit{Limited} --- The syntax also tends to enforce a more black-box testing style.  Here, we're constantly reminded that we're testing what a component \textit{should} do under specific conditions, and that helps us from getting ourselves in trouble by testing things that perhaps we shouldn't.
 \end{itemize}
 %\pause
 The end result? \textbf{better tests}.
