@@ -1,0 +1,489 @@
+%%\documentclass[t]{beamer}
+\documentclass[t,handout]{beamer}
+
+\usepackage{graphicx}
+\usepackage{pgf}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{color}
+
+\lstset{
+	language=Ruby,
+	basicstyle=\footnotesize\ttfamily\color{black},
+	commentstyle = \footnotesize\ttfamily\color{red},
+	keywordstyle=\footnotesize\ttfamily\color{blue},
+	stringstyle=\footnotesize\ttfamily\color{black},
+%	columns=fixed,
+%	numbers=left,    
+	numberstyle=\tiny,
+	stepnumber=1,
+	numbersep=5pt,
+	tabsize=1,
+	extendedchars=true,
+	breaklines=true,            
+	frame=b,         
+	showspaces=false,
+	showtabs=true,
+	xleftmargin=6pt,
+	framexleftmargin=6pt,
+	framexrightmargin=2pt,
+	framexbottommargin=4pt,
+	showstringspaces=false      
+}
+
+\lstloadlanguages{
+         Ruby,HTML
+}
+ %\DeclareCaptionFont{blue}{\color{blue}}
+
+\newcommand{\asgn}{\mbox{$\bf\leftarrow$ }}  %pseudocode assignment stmt
+\newcommand{\comt}{\mbox{$\; \rhd$ \ }}  %pseudocode comment
+
+\graphicspath{{images/}} % Figures path - used in graphicx
+
+%\selectcolormodel{cmyk}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\title[Module 5, Lecture 2]{ECE 495/595 -- Web Architectures/Cloud Computing}
+\subtitle{Module 5, Lecture 2: Web Application Security -- Authentication}
+
+\author[\copyright \ 2011-12 G. L. Heileman]{Professor G.L. Heileman}
+\date{}
+\institute[University of New Mexico]{\large University of New Mexico}
+
+\titlegraphic{
+\begin{figure} 
+\hspace{2cm}
+\includegraphics[width = 4in]{ECE-UNM-logo.pdf}
+\end{figure}}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+% This command will make the logo appear on all frames excluding the title frame.
+\logo{\includegraphics[width = 0.75in]{UNM.pdf}}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Web Application Security}
+\begin{itemize}
+\item In the previous lecture we considered the basic notions behind user authentication in web applications.
+ \pause
+ \item In this lecture we'll consider how to build your own user authentication into a Rails application. \pause
+ This will involve adding user authentication to the blog application, and will include a consideration of the various ways you can manage session information within a rails application.
+ \pause
+ \item Next we'll discuss some of the off-the-shelf authentication packages that can be incorporated into a Rails application.
+ \pause
+ \item Which approach you take depends upon the requirements of your application, how much customization you need to
+ perform, etc. --- whatever the case,  building authentication from scratch will help you to better understand 
+ authentication packages.
+\end{itemize}
+\end{frame}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}[fragile]\frametitle{Authentication from Scratch -- Adding Users}
+ \begin{itemize}
+   \item  The first thing we need to do is get rid of the HTTP-based authentication that is currently in application.  I.e., delete the following line in \lstinline!posts\_controller.rb!:
+\begin{lstlisting}[frame=none]
+# app/controllers/posts_controller.rb
+http_basic_authenticate_with :name => 'admin',
+   :password =>'secret', :except =>[:index, :show]
+\end{lstlisting}
+\pause
+Next, we need to add support for users in the blog application.  We won't generate a scaffold, because we don't need all of the functionality. \pause
+Users will login using their email address (to differentiate users) and a password, so run the following:~\\
+\begin{lstlisting}[frame=none]
+$ rails g model user email:string 
+      password_hash:string password_salt:string
+\end{lstlisting}
+\pause
+In order to create new users, we'll include the new action in the the users\_controller:
+\begin{lstlisting}[frame=none]
+$ rails g controller users new 
+$ rake db:migrate
+\end{lstlisting}
+ \end{itemize}
+\end{frame}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Sign Up}
+\vspace*{-0.125in}
+The form for signing up, {\tt app/views/users/new.html.erb}:
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\=**\=**\= \kill
+\> <h1>Sign Up</h1> \\ 
+\> <\%= form\_for @user do |f| \%> \\
+\>\>  <\% if @user.errors.any? \%> \\
+\>\>\>    <div class="error\_messages"> \\
+\>\>\>\>      <h2>Form is invalid</h2> \\ 
+\>\>\>\>      <ul> \\
+\>\>\>\>\>        <\% for message in @user.errors.full\_messages \%> \\
+\>\>\>\>\>\>          <li><\%= message \%></li> \\
+\>\>\>\>\>        <\% end \%> \\
+\>\>\>\>      </ul> \\
+\>\>\>    </div> \\
+\>\>  <\% end \%> \\
+\>\>  <p> <\%= f.label :email \%><br /> \\
+\>\>\>\>    <\%= f.text\_field :email \%> </p> \\
+\>\>  <p>  <\%= f.label :password \%><br /> \\
+\>\>\>\>    <\%= f.password\_field :password \%> </p> \\
+\>\>  <p> <\%= f.label :password\_confirmation \%><br /> \\
+\>\>\>\>    <\%= f.password\_field :password\_confirmation \%> </p> \\
+\>\>  <p class="button"><\%= f.submit  "Sign Up" \%></p> \\
+\> <\% end \%>
+\end{tabbing}}
+\end{frame}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Sign Up}
+\vspace*{-0.1in}
+{\small
+ \begin{itemize}
+  \item Notice the if statement that will be executed if there are any validation errors associated with the model.
+  \pause
+  \item Right now, if you start up the server, and navigate to {\tt http://localhost:3000/users/new}, you'll get an error because we have not handed the form a user object to work with.  \pause   In addition the {\tt create} action that will be called when the form is submitted has not been defined.  We take care of both of these actions on the next slide. \pause
+  \item One more thing we should fix.  When we generated the users controller, it added the following to {\tt config/routes.rb}:
+  {\tt\footnotesize \begin{tabbing} **\=**\=**\=**\=**\=**\= \kill
+   \>  get "users/new"
+   \end{tabbing}}
+  That's why the URL above works. \pause But this doesn't look very professional. To fix this, replace the line above with;
+    {\tt\footnotesize \begin{tabbing} **\=**\=**\=**\=**\=**\= \kill
+  \>  get "sign\_up" => "users\#new", :as => "sign\_up" \\
+  \> root :to => "posts\#index" \\
+  \> resources :users
+   \end{tabbing}}
+   \pause
+   This gives us the URL {\tt\footnotesize http://localhost:3000/sign\_up}
+ \end{itemize}}
+\end{frame}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Sign Up}
+{\small
+\begin{itemize}
+ \item Edit users\_controller.rb, defining the {\tt new} and {\tt create} actions:
+{\tt\scriptsize \begin{tabbing} \=**\=**\=**\=**\=**\=** \kill
+ class UsersController < ApplicationController \\ 
+\>  def new \\
+\>\>   @user = User.new \\
+\>  end \\ \\
+\>  def create \\
+\>\>    @user = User.new(params[:user]) \\
+\>\>    if @user.save \\
+\>\>\>      redirect\_to root\_url, :notice => "Successfully signed up!" \\
+\>\>   else \\
+\>\>\>      render "new" \\
+\>\>    end \\
+\>  end \\
+ end
+\end{tabbing}}   
+\pause
+ \item Now, when you navigate to ~\\
+  \ \ \ \ {\tt http://localhost:3000/sign\_up}~\\
+  you should see the form.  
+  \pause
+  Notice how the password and password\_confirmation fields don't display the text typed into them.
+ \end{itemize}}
+\end{frame}   
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}[fragile]\frametitle{Authentication from Scratch -- Sign Up}
+\vspace*{-0.1in}
+{\small
+ \begin{itemize}
+  \item What happens when you try to sign up a new user?  \pause You get an error: ~\\
+   {\footnotesize\tt Can't mass-assign protected attributes: password, password\_confirmation} ~\\ \pause
+  Why?  \pause Well, think back to how we generated the model, \pause there are no password or password confirmation attributes in our user model.
+  \pause
+  \item We want the model itself to have a password attribute, but we don't want the password to be saved in the database (remember, we're  going to store a hash of the password instead).  \pause  To accomplish this add the following to {\tt app/models/user.rb}:
+  
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},]
+class User < ActiveRecord::Base
+  attr_accessible :email, :password_hash, :password_salt, :password, :password_confirmation
+  attr_accessor :password
+  validates :email, :presence => true, 
+      :uniqueness => {:case_sensitive => false}
+  validates :password, :confirmation => true  
+end
+\end{lstlisting}
+   \pause
+   \item  Note: I took the time to add some validations too! 
+ \end{itemize}} 
+\end{frame}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Sign Up}
+{\small
+ \begin{itemize}
+
+   \item Now, when you navigate to~\\
+    \ \ \ \ {\tt http://localhost:3000/sign\_up} ~\\
+    you should be able to sign up new users. \pause You should also check that the validations are working.
+   \pause
+   \item Sign some up, and check the database (using SQLite Manager), the email is saved to the database, but the {\tt password\_hash} and {\tt password\_salt} are empty.
+   \pause
+   \item In order to make the root route work, you need to remove the file {\tt ./public/index.html}.
+   \pause
+   \item We'll add the gem {\tt bcrypt} and use it's one-way hash function.  In your Gemfile add the line:~\\
+   \ \ \ \ {\tt gem 'bcrypt-ruby', :require => 'bcrypt'}~\\
+   and run~\\
+    \ \ \ \ {\tt \$ bundle install}
+    \pause
+    \item Now add a before filter to the {\tt User} model that takes care of encrypting the password (next slide).
+ \end{itemize}}
+\end{frame} 
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}[fragile]\frametitle{Authentication from Scratch -- Sign Up}
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},xleftmargin=2pt]
+class User < ActiveRecord::Base
+ # accessor declarations and validations
+  
+  before_save :encrypt_password
+    
+  def encrypt_password
+    if password.present?
+      self.password_salt = BCrypt::Engine.generate_salt
+      self.password_hash = BCrypt::Engine.hash_secret(password,password_salt)
+    end
+  end
+  
+end
+\end{lstlisting}
+\end{frame}   
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Log In}
+ \begin{itemize}
+   \item When you navigate to {\tt http://localhost:3000/sign\_up}, you should be able to sign up new users, and you should see the encrypted password and 
+   password salt stored in the database as well.
+      \pause
+   \item We're halfway there --- users are now able to sign up, but they can't log in yet.  \pause To take care of this, we'll need to write the code that manages user sessions.
+   \pause
+   \item Let's start by creating a controller for sessions:~\\
+   \ \ \ \ \ {\tt\small \$ rails g controller sessions new} ~\\
+   \pause
+   Once again, we need to supply a form to work with the {\tt new} action in the sessions controller.  
+   \pause 
+   This is the form that will be used for signing in.
+   \pause
+   \item Because there is no session model, we will use the {\tt form\_tag} method, rather than the {\tt form\_for} method.  We simply want the form to POST to the {\tt sessions\_path}, which is the session controller's {\tt create} action.
+  \end{itemize}
+\end{frame} 
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Log In}
+\begin{itemize}
+ \item In /app/views/sessions/new.html.erb, write:
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\= \kill
+\> <h1>Log in</h1> \\ 
+\> <\%= form\_tag sessions\_path do \%> \\
+\>\>   <p>  <\%= label\_tag :email \%><br /> \\
+\>\>\> \>    <\%= text\_field\_tag :email, params[:email] \%>  </p> \\
+\>\>    <p> <\%= label\_tag :password \%><br /> \\
+\>\>\> \>     <\%= password\_field\_tag :password \%>  </p> \\
+\>\>    <p class="button"><\%= submit\_tag "Log In" \%></p> \\
+\> <\% end \%> \\
+\end{tabbing}}
+\pause
+\item We should also modify the routes.  In {\tt config/routes.rb} get rid of: ~\\
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\= \kill
+\> {get "sessions/new"} 
+\end{tabbing}}
+and add:
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\= \kill
+\> get "log\_in" => "sessions\#new", :as => "log\_in" \\
+\> get "log\_out" => "sessions\#destroy", :as => "log\_out" \\
+\> resources :sessions
+\end{tabbing}}
+\end{itemize}
+\end{frame} 
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}[fragile]\frametitle{Authentication from Scratch -- Authenticating}
+\vspace*{-0.1in}
+{\small
+We need to authenticate the user when they try to log in.  To do this, add the following method in
+{\tt /app/models/user.rb}:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black}]
+def self.authenticate(email, password) 
+   user = find_by_email(email)
+   if user && user.passwordhash == BCrypt::Engine.hash_secret(password, user.password_salt) 
+      user
+   else 
+      false
+   end 
+end
+\end{lstlisting}
+ \begin{itemize} 
+   \pause
+   \item This method will be invoked through a User object whenever a new session needs to be created.
+   \pause
+   \item The user-supplied email  is used to find a user object. \pause Then the user-supplied password, along with the stored password salt for the user, are run 
+   through the same one-way hash function used to create the stored password hash.  \pause If the computed password hash matches the stored password hash, 
+   the user is authenticated.
+ \end{itemize}}
+\end{frame}  
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}[fragile]\frametitle{Authentication from Scratch -- Log In}
+{\small
+The create method in {\tt app/controllers/sessions\_controller.rb}:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},	xleftmargin=0pt]
+def create
+    @user = User.new(params[:user])
+    if @user.save
+      redirect_to root_url, :notice => "Successfully signed up!" 
+    else
+      render "new"
+    end
+end
+\end{lstlisting}
+\pause
+\begin{itemize}
+ \item If a user is returned from the authentication method (authentication successful), then the user's id is stored in the Rails session hash.
+ \pause
+ \item If a user object is not returned (authentication fails), then a flash message is created, and the application redirects to the new method (which has been mapped to log\_in) in the sessions controller.
+\end{itemize}
+}
+\end{frame}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Log Out}
+\begin{itemize}
+\item  We also need to handle logging out.  Add a {\tt destroy} action to 
+{\tt app/controllers/sessions\_controller.rb}:
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\= \kill
+\>   def destroy \\
+\>\>     session[:user\_id] = nil \\
+\>\>    redirect\_to root\_url, :notice => "Logged out!" \\
+\>  end
+\end{tabbing}}
+\pause
+ \item We previously set up the {\tt log\_out} route to use this action.
+ \pause
+ \item After destroying the session, the application routes to the {\tt root\_url}.
+\end{itemize}
+\end{frame}
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Log In}
+{\small
+\begin{itemize}
+\item To display the flash messages, add the following to {\tt app/views/layouts/application.html.erb}, in the body, just before the {\tt <\%= yield \%>} statement.
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\= \kill
+\>  <\% flash.each do |name, msg| \%> \\
+\>\> <\%= content\_tag :div, msg, :id => "\#\{name\}" \%> \\
+\>  <\% end \%>
+  \end{tabbing}}
+  \pause 
+ \item If you'd like to use the ActiveRecord session store instead, you simply need to do the following
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\= \kill
+\> \$ rake db:sessions:create \\
+\> \$ rake db:migrate
+\end{tabbing}}
+This creates a table for sessions in the database.~\\
+\pause
+Then, you need to tell Rails to use it via a setting in {\tt config/initializers/session\_store.rg}:
+{\tt\footnotesize \begin{tabbing} **\=**\=**\=**\= \kill
+\> \$ MyApplication::Application.config.session\_store \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :active\_record\_store 
+\end{tabbing}}
+ \end{itemize}}
+\end{frame}
+  
+%---------------------------------------------------------------------- frame -
+\begin{frame}[fragile]\frametitle{Authentication from Scratch -- Adding Links}
+{\small
+\begin{itemize}
+\item Finally, let's add some links to the application that let a user sign-up and log in/out from any page in our blog application.
+\pause
+\item Place the following before the {\tt <\%= yield \%>} statement. in  {\tt app/views/layouts/application.html.erb}:
+\begin{lstlisting}[frame=none,language=HTML,basicstyle=\scriptsize\ttfamily\color{black}]
+<div id="user_nav">
+  <% if current_user %>
+      Logged in as <%= current_user.email %>
+      <%= link_to "Log out", log_out_path %> 
+  <% else %>
+      <%= link_to "Sign up", sign_up_path %> or
+      <%= link_to "Log in", log_in_path %> 
+  <% end %>
+</div>
+\end{lstlisting}
+\item Because this div was placed in the {\tt application.html.erb} file, this HTML will be executed prior to executing any other view code.
+\pause
+\item If there's a {\tt current\_user}, one set of links will be displayed, and if there's not, a different set of links is displayed.
+ \end{itemize}}
+\end{frame}  
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}[fragile]\frametitle{Authentication from Scratch -- Adding Links}
+\begin{itemize}
+\item However, the {\tt current\_user} is not defined yet.  To do that,  modify  {\tt app/controllers/application\_controller.rb} to look like:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black}]
+class ApplicationController < ActionController::Base
+  protect_from_forgery
+  
+  private
+  
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+  
+  helper_method :current_user
+end
+\end{lstlisting}
+  \pause
+    \item {\tt current\_user} is now a helper method that will be made available to every controller.
+  \end{itemize}
+\end{frame}  
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Summary}
+{\small
+\begin{itemize}
+ \item Right now, we're sending user credentials in the clear.  To fix this, add the {\tt force\_sll} class method to {\tt user\_controller.rb} and {\tt session\_controller.rb}.
+ \pause
+ \item We should probably also add some additional validations. E.g., you might consider
+  \begin{itemize}
+   \item[--] Making sure the email provided looks like an email address.
+   \pause
+   \item[--] Ensuring that passwords are strong -- right now, you can supply a password at sign-up that is a single character.
+   \end{itemize}
+  \pause
+  \item Lastly, in real applications, we need to handle the situation of users forgetting their username or password, logging user activity, etc.
+  \pause
+  \item Related to this notion, why are we saying ``Invalid email or password" when user enters either an invalid email (on not in our database) or password?~\\
+  Why don't we tell them which one is invalid?
+ \end{itemize}}
+\end{frame}  
+
+%---------------------------------------------------------------------- frame -
+\begin{frame}\frametitle{Authentication from Scratch -- Summary}
+{\small
+\begin{itemize}
+\item That's it, we now have basic user authentication integrated into our blog application.
+\pause
+\item However, we haven't used it for anything yet.  \pause Specifically, we'd like to use this authentication to restrict users from accessing certain resources --- this is referred to as \textcolor{blue}{access control}.
+\pause
+\item In fact, we'd like to assign roles to users, e,g., administrator, moderator, user, and then restrict access according to the users role --- this is referred to as \textcolor{blue}{role-based access control}.  We'll cover that in the next lecture.
+\pause
+\item In addition, since we now have a good idea as to how authentication works, we'll add access control using on top of an existing Rails authentication framework --- this is the way you will normally bring authentication/access control into your applications.
+\pause
+ \end{itemize}}
+\end{frame}  
+
+\end{document}
+
+\item The most popular Rails authentication frameworks include: Authlogic, Restful Authentication, Clearance, Devise and Sorcery.
+
+
