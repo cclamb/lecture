@@ -82,6 +82,23 @@
 \section{What is Capistrano?}
 \begin{frame}
 \frametitle{What is Capistrano?}
+~\\
+\begin{center}
+{\bf Capistrano is a distributed system management framework.} \\
+\end{center}
+It supports: \\
+~\\
+\begin{small}
+\begin{itemize}
+\item Distributed deployments.
+\item Command distribution.
+\item General large-scale system management.
+\end{itemize}
+\end{small}
+\begin{center}
+~\\
+{\bf So what?}
+\end{center}
 \end{frame}
 
 \section{Why use it?}
@@ -159,6 +176,23 @@ But honestly, not very real world.  Systems with any kind of availability requir
 \end{center}
 \transfade
 \end{frame}
+
+\begin{frame}
+\frametitle{So how do you do it?}
+Well, you don't want to log into each system to administer manually.  And why is that?
+\begin{small}
+\begin{itemize}
+\item {\bf Scalability} You don't scale.  Sorry.
+\item {\bf Reproducibility}  It's very difficult to recreate the same sequence of actions and configurations across multiple systems, so you'll generally script it.  Which is what Capistrano does, in a distributed way.
+\item {\bf Human Error} You make lots of mistakes too.  If you can tell a machine what to do, it'll do a better job than you can.
+\end{itemize}
+\end{small}
+\begin{center}
+{\bf So figure out how to tell machines to configure themselves.  Or, use a system built by somebody else to tell machines to configure themselves, like Capistrano.}
+\end{center}
+\end{frame}
+
+
 
 \end{document}
 
