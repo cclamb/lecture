@@ -281,15 +281,34 @@ cap shell                 # Begin an interactive Capistrano session.
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Capistrano is Biased}
 Nice! But Capistrano was developed expressly to deploy distributed Rails applications and carries baggage around from this heritage.\\~\\
 
 Unless you're deploying Rails, you'll want to get around this --- {\bf railsless-deploy} to the rescue!
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},commentstyle=\tiny\ttfamily\color{red}]
+$ gem install railsless-deploy
+\end{lstlisting}
+Or add to your Gemfile:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},commentstyle=\tiny\ttfamily\color{red}]
+...
+gem 'railsless-deploy'
+...
+\end{lstlisting}
+Other plugins include {\small\tt bundler/capistrano} and {\small\tt rvm-capistrano}.
 \end{frame}
 
 \begin{frame}
 \frametitle{Other Useful Plug-ins}
+You'll want to pre-install {\bf bundler} and {\bf rvm} these on the system you're using. Why?
+\begin{itemize}
+\item {\bf bundler} will ensure that your bundles are correctly installed.  Remember you installed bundler in the base image? this also installs {\small\tt bundler/capistrano}, which is what you use to integrate bundler.
+\item {\bf rvm} is more than just a gem, so it's out of {\bf bundler}'s league.  A typical {\bf rvm} install in your base image will suffice.  After RVM is installed you can install {\small\tt rvm-capistrano} with {\bf bundler} or via the command line.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+
 \end{frame}
 
 \end{document}
