@@ -55,7 +55,7 @@
 \title[Module 5, Lecture 2]{ECE 495/595 -- Web Architectures/Cloud Computing}
 \subtitle{Module 5, Lecture 2: Web Application Security -- Authentication}
 
-\author[\copyright \ 2012 C. C. Lamb]{Christopher Lamb Ph.D, CISSP, TCEA}
+\author[\copyright \ 2012 C. C. Lamb]{Christopher C. Lamb}
 \date{}
 \institute[University of New Mexico]{\large University of New Mexico}
 
@@ -232,12 +232,60 @@ This creates, in the project directory, a {\small\tt config} directory containin
 
 \begin{frame}[fragile]
 \frametitle{How do these files work?}
+{\bf Capfile:}\\
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},]
+load 'deploy'
+load 'config/deploy'
+\end{lstlisting}
+{\bf config/deploy.rb:}
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},]
+set :application, "set your application name here"
+set :repository,  "set your repository location here"
+
+set :scm, :subversion
+
+role :web, "your web-server here"
+role :app, "your app-server here"
+role :db,  "your primary db-server here", :primary => true 
+role :db,  "your slave db-server here"
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{What does this give you?}
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\tiny\ttfamily\color{black},commentstyle=\tiny\ttfamily\color{red}]
+$ cap -T
+cap deploy                # Deploys your project.
+cap deploy:check          # Test deployment dependencies.
+cap deploy:cleanup        # Clean up old releases.
+cap deploy:cold           # Deploys and starts a `cold' application.
+cap deploy:create_symlink # Updates the symlink to the most recently deployed...
+cap deploy:migrate        # Run the migrate rake task.
+cap deploy:migrations     # Deploy and run pending migrations.
+cap deploy:pending        # Displays the commits since your last deploy.
+cap deploy:pending:diff   # Displays the `diff' since your last deploy.
+cap deploy:restart        # Blank task exists as a hook into which to install...
+cap deploy:rollback       # Rolls back to a previous version and restarts.
+cap deploy:rollback:code  # Rolls back to the previously deployed version.
+cap deploy:setup          # Prepares one or more servers for deployment.
+cap deploy:start          # Blank task exists as a hook into which to install...
+cap deploy:stop           # Blank task exists as a hook into which to install...
+cap deploy:symlink        # Deprecated API.
+cap deploy:update         # Copies your project and updates the symlink.
+cap deploy:update_code    # Copies your project to the remote servers.
+cap deploy:upload         # Copy files to the currently deployed version.
+cap deploy:web:disable    # Present a maintenance page to visitors.
+cap deploy:web:enable     # Makes the application web-accessible again.
+cap invoke                # Invoke a single command on the remote servers.
+cap shell                 # Begin an interactive Capistrano session.
+\end{lstlisting}
 \end{frame}
 
 \begin{frame}
 \frametitle{Capistrano is Biased}
-Rails heritage \\
-Getting around it
+Nice! But Capistrano was developed expressly to deploy distributed Rails applications and carries baggage around from this heritage.\\~\\
+
+Unless you're deploying Rails, you'll want to get around this --- {\bf railsless-deploy} to the rescue!
 \end{frame}
 
 \begin{frame}
