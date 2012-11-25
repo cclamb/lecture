@@ -193,13 +193,45 @@ Well, you don't want to log into each system to administer manually.  And why is
 \end{frame}
 
 \begin{frame}
-\frametitle{Capistrano Structure}
+\frametitle{What you need to do first...}
+{\bf Capistrano can help you deploy applications, but it needs systems first.} \\~\\
+You need to have systems set up and configured for use.
+\begin{small}
+\begin{itemize}
+\item {\bf Chef, Puppet}
+\item {\bf Vagrant}
+\end{itemize}
+\end{small}
+They need to have supporting infrastructure installed, like {\bf ruby}, {\bf capistrano}, {\bf bundler}, {\bf rvm}, and {\bf git}.\\~\\
+\begin{center}
+{\bf Setup isn't turnkey, but future use of Capistrano is.}
+\end{center}
 \end{frame}
 
-\begin{frame}
+
+\begin{frame}[fragile]
 \frametitle{Starting Out}
-Installation \\
-Project Init\
+Now, install Capistrano on your workstation:\\
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},]
+$ gem install capistrano
+\end{lstlisting}
+Or use bundler, with a gem file:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},]
+source :rubygems
+gem 'capistrano'
+\end{lstlisting}
+Now initialize the project:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},]
+$ cd <project directory>
+$ capify .
+\end{lstlisting}
+This creates, in the project directory, a {\small\tt config} directory containing a {\small\tt deploy.rb} file, and a file in the project root named {\small\tt Capfile}.
+%Installation \\
+%Project Init\
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{How do these files work?}
 \end{frame}
 
 \begin{frame}
