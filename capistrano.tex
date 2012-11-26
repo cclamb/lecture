@@ -61,7 +61,6 @@
 
 \titlegraphic{
 \begin{figure} 
-\hspace{2cm}
 \includegraphics[width = 4in]{ECE-UNM-logo.pdf}
 \end{figure}}
 
@@ -192,6 +191,7 @@ Well, you don't want to log into each system to administer manually.  And why is
 \end{center}
 \end{frame}
 
+\section{Getting started...}
 \begin{frame}
 \frametitle{What you need to do first...}
 {\bf Capistrano can help you deploy applications, but it needs systems first.} \\~\\
@@ -301,14 +301,124 @@ Other plugins include {\small\tt bundler/capistrano} and {\small\tt rvm-capistra
 \begin{frame}
 \frametitle{Other Useful Plug-ins}
 You'll want to pre-install {\bf bundler} and {\bf rvm} these on the system you're using. Why?
+\begin{small}
 \begin{itemize}
 \item {\bf bundler} will ensure that your bundles are correctly installed.  Remember you installed bundler in the base image? this also installs {\small\tt bundler/capistrano}, which is what you use to integrate bundler.
 \item {\bf rvm} is more than just a gem, so it's out of {\bf bundler}'s league.  A typical {\bf rvm} install in your base image will suffice.  After RVM is installed you can install {\small\tt rvm-capistrano} with {\bf bundler} or via the command line.
 \end{itemize}
+\end{small}
+\begin{center}
+{\bf Now let's try this with a real system.}
+\end{center}
+\end{frame}
+
+\section{...Getting on with it...}
+\begin{frame}
+\frametitle{A Content Delivery Network}
+\begin{center}
+\includegraphics[width = 3.5 in]{hierarchical-clouds.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}
+\frametitle{How do we support this?}
+This has 23 systems across 2 cloud infrastructure providers and integral external services.\\~\\
 
+What tools do we use?
+\begin{small}
+\begin{itemize}
+\item {\bf Base Tooling} --- Ruby, Bundler, RVM
+\item {\bf Deployment} --- Capistrano
+\item {\bf SCM} --- Git
+\item {\bf HTTP Services} ---  S3, EC2, Rackspace Servers
+\end{itemize}
+\end{small}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Capfile}
+First, the Capfile: \\
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},commentstyle=\scriptsize\ttfamily\color{red}]
+require 'rubygems'         # Loading gem support
+require 'railsless-deploy' # Loading railsless operation
+
+# Loading vendor supplied plugins
+Dir['vendor/gems/*/recipes/*.rb',
+    'vendor/plugins/*/recipes/*.rb'].each do |plugin| 
+  load(plugin) 
+end
+
+load 'config/deploy' # loading deployment tasks
+\end{lstlisting}
+Why are we altering this file, and not just the {\small\tt config/deploy.rb} file?\\~\\
+We need to load the {\small\tt railsless-deploy} support prior to the {\small\tt config/deploy} targets.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{config/deploy.rb}
+Now, the deployment configuration:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},commentstyle=\scriptsize\ttfamily\color{red}]
+require 'bundler/capistrano' # Bundler support
+require 'rvm/capistrano' # RVM support
+
+require 'yaml' # YAML, for loading config info into S3
+require 'aws-sdk' # Support for Amazon S3 APIs (and others)
+
+set :rvm_ruby_string, '1.9.3' # The ruby version we'll use
+
+ssh_options[:keys] = ['etc/pod.pem'] # Amazon key file
+
+# Use GIT, and use this repository with this branch
+set :scm, :git
+set :repository,  'https://github.com/cclamb/overlay.git'
+set :branch, 'final'
+
+set :application, 'content-network' # Application name
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{config/deploy.rb}
+Now, the deployment configuration:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},commentstyle=\scriptsize\ttfamily\color{red}]
+# The credentials to use; not maintained in Github
+creds_file_name = 'etc/creds.yaml'
+
+# The credentials are formatted in YAML.
+creds = YAML::load File::open(creds_file_name)
+
+# This is the format of the YAML file.
+msg =<<EOF
+Submitted credentials are:
+  rackspace password: #{creds['rackspace']['password']}
+  amazon access key: #{creds['amazon']['access_key']}
+  amazon secret key: #{creds['amazon']['secret_key']}
+EOF
+puts msg
+
+# Configuring SUDO and deploy locations.
+set :use_sudo, false
+set :deploy_to, '~'
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{config/deploy.rb}
+Setting credentials and keys:
+\begin{lstlisting}[frame=none,language=Ruby,basicstyle=\scriptsize\ttfamily\color{black},commentstyle=\scriptsize\ttfamily\color{red}]
+# Setting some credentials for Rackspace.
+set :user, 'overlay'
+set :password, creds['rackspace']['password']
+
+# Setting the keys for Amazon.
+access_key = creds['amazon']['access_key']
+secret_key = creds['amazon']['secret_key']
+AWS.config \
+  :access_key_id => access_key, \
+  :secret_access_key => secret_key
+\end{lstlisting}
+Why do we have so many keys? Remember the PEM file?\\~\\
+The PEM file contains keys for {\bf SSH}, the access and secret keys are used to authenticate into Amazon's infrastructure.
 \end{frame}
 
 \end{document}
