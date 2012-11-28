@@ -453,6 +453,7 @@ role :nodes, '198.101.205.153', \
 \end{frame}
 
 \begin{frame}[fragile]
+\frametitle{config/deploy.rb}
 Some final configuration with S3:
 \begin{lstlisting}[frame=none,
   language=Ruby,
@@ -474,6 +475,7 @@ Now we've finished configuration, we're ready for the targets.
 \end{frame}
 
 \begin{frame}[fragile]
+\frametitle{config/deploy.rb}
 Namespaced Tasks:
 \begin{lstlisting}[frame=none,
   language=Ruby,
@@ -490,9 +492,29 @@ namespace :nodes do
     stream 'tail -f ./current/system.log'
   end
   
+  task :stop, :roles => :nodes do
+    run "cd current ; bundle exec bin/stop_overlay_component"
+  end
+
 end
 
 \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Bringing it Together}
+Typical command-line use:
+\begin{lstlisting}[frame=none,
+  language=Ruby,
+  basicstyle=\scriptsize\ttfamily\color{black},
+  commentstyle=\scriptsize\ttfamily\color{red},
+  stringstyle=\scriptsize\ttfamily\color{black}]
+$ git add .
+$ git commit -m 'deploying'
+$ git push origin final
+$ cap nodes:stop nodes:start nodes:monitor  
+\end{lstlisting}
+
 \end{frame}
 
 \end{document}
