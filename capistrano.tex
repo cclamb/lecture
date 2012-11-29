@@ -514,7 +514,36 @@ $ git commit -m 'deploying'
 $ git push origin final
 $ cap nodes:stop nodes:start nodes:monitor  
 \end{lstlisting}
+In a more rigorous environment, you'd probably have a more stringent branching standard (e.g. merge branches to master, test, merge branches to stage, then deploy from stage).
+\\~\\
+This has two stages
+\begin{small}
+\begin{itemize}
+\item {\bf Bootstrap} --- Capistrano is key here.  Distribute code and configuration data and start the system.
+\item {\bf Run} --- Nodes retrieve configuration and other information and begin operation.
+\end{itemize}
+\end{small}
+\end{frame}
 
+\begin{frame}
+\frametitle{Wrapping up}
+So what to remember? \\~\\
+
+Capistrano...
+\begin{itemize}
+\item ...is really useful for distributed deployments.
+\item ...does require some initial setup.
+\item ...is configured differently on different IaaS providers.
+\item ...is very flexible.
+\item ...but doesn't do everything!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]
+\frametitle{That's it!}
+\begin{center}
+{\bf Questions?}
+\end{center}
 \end{frame}
 
 \end{document}
